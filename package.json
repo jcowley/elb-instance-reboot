@@ -1,0 +1,21 @@
+{
+  "name": "elb-instance-reboot",
+  "version": "1.0.0",
+  "description": "Lambda function to automatically reboot unhealthy AWS ELB instances",
+  "main": "elb-instance-reboot.js",
+  "scripts": {
+    "test": "claudia test-lambda"
+  },
+  "keywords": [
+    "AWS",
+    "ELB",
+    "reboot",
+    "healthcheck"
+  ],
+  "author": "jcowley",
+  "license": "MIT",
+  "dependencies": {
+    "async-waterfall": "^0.1.5",
+    "aws-sdk": "^2.4.9"
+  }
+}
