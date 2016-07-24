@@ -7,38 +7,23 @@ an SNS topic message.
 ## Prerequisites
 
 * AWS account with access to: IAM, Lambda, SNS, CloudWatch, ELB, and EC2
+
+The following installed on your local machine (for deployment):
+
 * [Node (with NPM) Installed](https://docs.npmjs.com/getting-started/installing-node) 
 * [Claudia NPM package](https://www.npmjs.com/package/claudia) `npm install -g claudia`
 * [AWS CLI Installed](http://docs.aws.amazon.com/cli/latest/userguide/installing.html) 
-
-### Configure AWS access credentials
-
-(*Note*: If you've followed the instructions for 
-[configuring the AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html), 
-then you can skip this section.)
-
-The labmda function, required IAMS policies, and the SNS topic are deployed 
-via the command line using [Claudia](https://github.com/claudiajs/claudia).
-The SNS Topic and CloudWatch alarm are configured using the AWS CLI. For both,
-you'll need to have your AWS credentials configured locally.
-
-Run `aws configure`, or manually add your access keys to .aws/credentials in your home directory:
-
-```
-[default]
-aws_access_key_id = YOUR_ACCESS_KEY
-aws_secret_access_key = YOUR_ACCESS_SECRET
-```
+* [AWS CLI credentials configured](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) Just run `aws configure`
 
 ## Deployment and Configuration
 
-Run the following commands from the top-level project directory.
+To deploy and configure the lambda function, run the following commands from the top-level project directory.
 
 ### Step 1: Deploy the lambda function
 
 Substitute the region of your elb for {region}, e.g. `us-west-2`
 
-(*Note*: AWS CLI calls often take a few seconds to return. So we need to 
+(*Note*: AWS calls often take a few seconds to return. So we need to 
 bump the lambda function timeout to 60 seconds.)
 
 ```
@@ -67,11 +52,24 @@ one or more EC2 instances are out of service for more than 1 minute. You can
 alter the values for threshold, period, and evaluation-periods to suit your needs.
 
 Substitute the name of the load balancer you want to monitor for {elb name}. 
-Substitute the `TopicArn` value from step 3 for {topic}
+Substitute the `TopicArn` value from step 3 for {topic}.
 
 ```
-aws cloudwatch put-metric-alarm --alarm-name unhealthy-instances --metric-name UnHealthyHostCount --namespace AWS/ELB --statistic Minimum --period 60 --threshold 1 --comparison-operator GreaterThanOrEqualToThreshold --evaluation-periods 1 --alarm-actions {topic} --dimensions "Name=LoadBalancerName,Value={elb name}" 
+aws cloudwatch put-metric-alarm --alarm-name unhealthy-instances \
+ --metric-name UnHealthyHostCount \
+ --namespace AWS/ELB \
+ --statistic Minimum \
+ --period 60 \
+ --threshold 1 \
+ --comparison-operator GreaterThanOrEqualToThreshold \
+ --evaluation-periods 1 \
+ --alarm-actions {topic} \
+ --dimensions "Name=LoadBalancerName,Value={elb name}" 
 ```
+
+If you have multiple load balancers that you want to monitor, set a separate alarm
+for each one. These alarms can all point to the same SNS Topic and utilize the same
+lambda function.
 
 ## Test
 
