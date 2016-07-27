@@ -1,6 +1,9 @@
 const AWS = require('aws-sdk');
 const waterfall = require('async-waterfall');
 
+/**
+ * Lambda function for rebooting instances
+ */
 exports.handler = function(event, context, callback) {
 
   const message = JSON.parse(event.Records[0].Sns.Message);

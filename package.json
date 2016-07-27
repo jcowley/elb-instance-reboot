@@ -1,6 +1,6 @@
 {
-  "name": "elb-instance-reboot",
-  "version": "1.0.0",
+  "name": "aws-elb-monitor",
+  "version": "0.1.0",
   "description": "Lambda function to automatically reboot unhealthy AWS ELB instances",
   "main": "elb-instance-reboot.js",
   "scripts": {
@@ -16,6 +16,20 @@
   "license": "MIT",
   "dependencies": {
     "async-waterfall": "^0.1.5",
-    "aws-sdk": "^2.4.9"
-  }
+    "aws-sdk": "^2.4.9",
+    "inquirer": "^1.1.2",
+    "inquiry": "0.0.2"
+  },
+  "bin": {
+    "aws-elb-monitor": "bin/aws-elb-monitor.bin.js"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcowley/elb-instance-reboot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jcowley/elb-instance-reboot/issues"
+  },
+  "homepage": "https://github.com/jcowley/elb-instance-reboot#readme"
 }
